@@ -69,6 +69,15 @@ fi
 case "$1" in
   local-runner)
     install_requirements
+
+    echo "activating venv for jupyter"
+    source /usr/local/airflow/venv/bin/activate
+    echo "running jupyter notebook..."
+    cat /banner.txt
+    nohup jupyter-notebook --ip=0.0.0.0 &
+    echo "virtual environment deactivated"
+    deactivate
+
     airflow db init
     if [ "$AIRFLOW__CORE__EXECUTOR" = "LocalExecutor" ] || [ "$AIRFLOW__CORE__EXECUTOR" = "SequentialExecutor" ]; then
       # With the "Local" and "Sequential" executors it should all run in one container.
